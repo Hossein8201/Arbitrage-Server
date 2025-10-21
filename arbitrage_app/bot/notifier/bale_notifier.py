@@ -3,8 +3,8 @@ import logging
 import requests
 from typing import Optional
 from datetime import datetime
-from scraper.detector.arbitrage_detector import ArbitrageOpportunity
-from scraper.sample_trading import TRADING_PAIRS
+from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
+from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -17,7 +17,7 @@ class BaleNotifier:
     def __init__(self, bot_token: str, chat_id: str):
         self.bot_token = bot_token
         self.chat_id = chat_id
-        self.base_url = f"https://web.bale.ai/bot{bot_token}"
+        self.base_url = f"https://tapi.bale.ai/bot{bot_token}"
         
     def send_message(self, message: str) -> bool:
         """
@@ -30,7 +30,6 @@ class BaleNotifier:
             True if message sent successfully, False otherwise
         """
         url = f"{self.base_url}/sendMessage"
-        
         payload = {
             "chat_id": self.chat_id,
             "text": message,
@@ -76,22 +75,22 @@ class BaleNotifier:
         
         # Create the message
         message = f"""
-🚨 <b>ARBITRAGE OPPORTUNITY DETECTED!</b> 🚨
+🚨 * ARBITRAGE OPPORTUNITY DETECTED! * 🚨
 
-📊 <b>Currency Pair:</b> {opportunity.symbol}
-⏰ <b>Discovery Time:</b> {time_str}
+📊 * Currency Pair: * {opportunity.symbol}
+⏰ * Discovery Time: * {time_str}
 
-💰 <b>Price Information:</b>
-• <b>Nobitex Price:</b> {nobitex_price_str} IRT
-• <b>Wallex Price:</b> {wallex_price_str} USDT
+💰 * Price Information: *
+• * Nobitex Price: * {nobitex_price_str} USDT
+• * Wallex Price: * {wallex_price_str} USDT
 
-📈 <b>Arbitrage Details:</b>
-• <b>Buy Exchange:</b> {opportunity.buy_exchange.upper()}
-• <b>Sell Exchange:</b> {opportunity.sell_exchange.upper()}
-• <b>Profit Percentage:</b> {profit_percentage_str}
-• <b>Profit Amount:</b> {profit_amount_str} IRT
+📈 * Arbitrage Details: *
+• * Buy Exchange: * {opportunity.buy_exchange.upper()}
+• * Sell Exchange: * {opportunity.sell_exchange.upper()}
+• * Profit Percentage: * {profit_percentage_str}
+• * Profit Amount: * {profit_amount_str} USDT
 
-⚡ <i>Act quickly! Arbitrage opportunities may disappear fast.</i>
+⚡ _ Act quickly! Arbitrage opportunities may disappear fast. _
         """.strip()
         
         return message
@@ -117,12 +116,12 @@ class BaleNotifier:
             True if test message sent successfully, False otherwise
         """
         test_message = """
-🤖 <b>Arbitrage Detection Bot</b>
+🤖 * Arbitrage Detection Bot *
 
 ✅ Bot is working correctly!
 ⏰ Test time: {time}
 
-<i>This is a test message to verify the Bale bot configuration.</i>
+_ This is a test message to verify the Bale bot configuration. _
         """.format(time=datetime.now().strftime("%Y-%m-%d %H:%M:%S")).strip()
         
         return self.send_message(test_message)
@@ -135,13 +134,13 @@ class BaleNotifier:
             True if notification sent successfully, False otherwise
         """
         startup_message = """
-🚀 <b>Arbitrage Detection Service Started</b>
+🚀 * Arbitrage Detection Service Started *
 
 ⏰ Start time: {time}
 📊 Monitoring: {pairs} trading pairs
 🎯 Threshold: {threshold}%
 
-<i>The service is now actively monitoring for arbitrage opportunities.</i>
+_ The service is now actively monitoring for arbitrage opportunities. _
         """.format(
             time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             pairs=len(TRADING_PAIRS),
@@ -161,12 +160,12 @@ class BaleNotifier:
             True if notification sent successfully, False otherwise
         """
         error_notification = f"""
-❌ <b>Arbitrage Detection Service Error</b>
+❌ * Arbitrage Detection Service Error *
 
 ⏰ Time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 🚨 Error: {error_message}
 
-<i>Please check the service logs for more details.</i>
+_ Please check the service logs for more details. _
         """.strip()
         
         return self.send_message(error_notification)

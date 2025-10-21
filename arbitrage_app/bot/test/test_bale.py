@@ -8,8 +8,8 @@ import os
 import logging
 import time
 from datetime import datetime
-from notifier.notification_service import ArbitrageNotificationService
-from scraper.detector.arbitrage_detector import ArbitrageOpportunity
+from arbitrage_app.bot.notifier.notification_service import ArbitrageNotificationService
+from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
 
 from dotenv import load_dotenv
 load_dotenv()
@@ -110,7 +110,7 @@ def test_arbitrage_notification():
     
     service = ArbitrageNotificationService()
     
-    if not service.telegram_notifier:
+    if not service.bale_notifier:
         print("❌ Bale notifier not configured")
         return False
     

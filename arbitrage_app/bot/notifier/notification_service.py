@@ -3,8 +3,8 @@ import logging
 import time
 from typing import List
 from datetime import datetime
-from scraper.detector.arbitrage_detector import ArbitrageDetector, ArbitrageOpportunity
-from bale_notifier import BaleNotifier, create_bale_notifier
+from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageDetector, ArbitrageOpportunity
+from arbitrage_app.bot.notifier.bale_notifier import BaleNotifier, create_bale_notifier
 
 
 logger = logging.getLogger(__name__)

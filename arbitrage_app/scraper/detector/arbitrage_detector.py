@@ -3,9 +3,9 @@ import os
 import time
 from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
-from api.nobitex_api import NobitexAPI
-from api.wallex_api import WallexAPI
-from sample_trading import TRADING_PAIRS
+from arbitrage_app.scraper.api.nobitex_api import NobitexAPI
+from arbitrage_app.scraper.api.wallex_api import WallexAPI
+from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
 
 from dotenv import load_dotenv
 load_dotenv()

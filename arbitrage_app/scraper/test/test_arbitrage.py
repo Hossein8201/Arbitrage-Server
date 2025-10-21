@@ -5,8 +5,8 @@ This script tests the API integrations and arbitrage detection logic
 
 import logging
 import time
-from detector.arbitrage_detector import ArbitrageDetector
-from sample_trading import TRADING_PAIRS
+from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageDetector
+from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
 
 # Configure logging
 logging.basicConfig(
