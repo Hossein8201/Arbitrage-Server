@@ -3,9 +3,7 @@ import requests
 import time
 import logging
 from typing import Dict, Optional
-
-from dotenv import load_dotenv
-load_dotenv()
+from arbitrage_app.sample_trading import NOBITEX_BASE_URL, NOBITEX_RATE_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -13,8 +11,8 @@ class NobitexAPI:
     """Client for interacting with Nobitex exchange API"""
     
     def __init__(self):
-        self.base_url = os.getenv("NOBITEX_BASE_URL")
-        self.rate_limit = int(os.getenv("NOBITEX_RATE_LIMIT"))
+        self.base_url = NOBITEX_BASE_URL
+        self.rate_limit = NOBITEX_RATE_LIMIT
         self.last_request_time = 0
         self.request_count = 0
         self.minute_start = time.time()
@@ -28,6 +26,7 @@ class NobitexAPI:
             self.request_count = 0
             self.minute_start = current_time
         print(self.rate_limit)
+        
         # If we've hit the limit, wait until the next minute
         if self.request_count >= self.rate_limit:
             wait_time = 60 - (current_time - self.minute_start)
@@ -50,7 +49,7 @@ class NobitexAPI:
         Get latest trades for a given symbol
         
         Args:
-            symbol: Trading pair symbol (e.g., 'BTCIRT')
+            symbol: Trading pair symbol (e.g., 'BTCUSDT')
             
         Returns:
             Dictionary containing trades data or None if error

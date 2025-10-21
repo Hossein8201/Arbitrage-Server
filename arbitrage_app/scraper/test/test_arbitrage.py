@@ -6,7 +6,7 @@ This script tests the API integrations and arbitrage detection logic
 import logging
 import time
 from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageDetector
-from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
+from arbitrage_app.sample_trading import TRADING_PAIRS
 
 # Configure logging
 logging.basicConfig(
@@ -21,7 +21,7 @@ def test_api_connections():
     detector = ArbitrageDetector()
     
     # Test a few symbols
-    test_symbols = ["BTCUSDT", "ETHUSDT", "USDTUSDT"]
+    test_symbols = ["BTCUSDT", "ETHUSDT", "XRPUSDT"]
     
     for symbol in test_symbols:
         print(f"\nTesting {symbol}:")
@@ -39,7 +39,7 @@ def test_api_connections():
             arbitrage_result = detector.calculate_arbitrage(nobitex_price, wallex_price)
             if arbitrage_result:
                 profit, buy_ex, sell_ex = arbitrage_result
-                print(f"  🎯 Arbitrage opportunity: {profit:.2f}% (Buy {buy_ex}, Sell {sell_ex})")
+                print(f"  🎯 Arbitrage opportunity: {profit:.6f}% (Buy {buy_ex}, Sell {sell_ex})")
             else:
                 print(f"  No arbitrage opportunity")
         else:
@@ -106,8 +106,8 @@ def test_full_scan():
         print("-" * 100)
         
         for opp in opportunities:
-            print(f"{opp.symbol:<10} {opp.nobitex_price:<15.2f} {opp.wallex_price:<15.2f} "
-                  f"{opp.profit_percentage:<10.2f} {opp.buy_exchange:<10} {opp.sell_exchange:<10}")
+            print(f"{opp.symbol:<10} {opp.nobitex_price:<15.6f} {opp.wallex_price:<15.6f} "
+                  f"{opp.profit_percentage:<10.6f} {opp.buy_exchange:<10} {opp.sell_exchange:<10}")
     else:
         print("No arbitrage opportunities found at this time.")
 

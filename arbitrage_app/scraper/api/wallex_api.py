@@ -3,9 +3,7 @@ import requests
 import time
 import logging
 from typing import Dict, Optional
-
-from dotenv import load_dotenv
-load_dotenv()
+from arbitrage_app.sample_trading import WALLEX_BASE_URL, WALLEX_RATE_LIMIT
 
 logger = logging.getLogger(__name__)
 
@@ -13,8 +11,8 @@ class WallexAPI:
     """Client for interacting with Wallex exchange API"""
     
     def __init__(self):
-        self.base_url = os.getenv("WALLEX_BASE_URL")
-        self.rate_limit = int(os.getenv("WALLEX_RATE_LIMIT"))
+        self.base_url = WALLEX_BASE_URL
+        self.rate_limit = WALLEX_RATE_LIMIT
         self.last_request_time = 0
         self.request_count = 0
         self.minute_start = time.time()

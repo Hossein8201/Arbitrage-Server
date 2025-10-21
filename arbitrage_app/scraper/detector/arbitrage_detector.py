@@ -5,10 +5,7 @@ from typing import Dict, List, Optional, Tuple
 from dataclasses import dataclass
 from arbitrage_app.scraper.api.nobitex_api import NobitexAPI
 from arbitrage_app.scraper.api.wallex_api import WallexAPI
-from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
-
-from dotenv import load_dotenv
-load_dotenv()
+from arbitrage_app.sample_trading import TRADING_PAIRS, ARBITRAGE_THRESHOLD
 
 logger = logging.getLogger(__name__)
 
@@ -31,7 +28,7 @@ class ArbitrageDetector:
         self.nobitex_api = NobitexAPI()
         self.wallex_api = WallexAPI()
         self.trading_pairs = TRADING_PAIRS
-        self.threshold = float(os.getenv("ARBITRAGE_THRESHOLD"))
+        self.threshold = ARBITRAGE_THRESHOLD
         
     def get_price_data(self, symbol: str) -> Dict[str, Optional[float]]:
         """
@@ -143,7 +140,7 @@ class ArbitrageDetector:
                 if opportunity:
                     opportunities.append(opportunity)
                     logger.info(f"Arbitrage opportunity found for {symbol}: "
-                              f"{opportunity.profit_percentage:.2f}% profit "
+                              f"{opportunity.profit_percentage:.6f}% profit "
                               f"(Buy {opportunity.buy_exchange}, Sell {opportunity.sell_exchange})")
             except Exception as e:
                 logger.error(f"Error scanning {symbol}: {e}")
