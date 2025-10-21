@@ -7,7 +7,6 @@ This script tests the Bale bot integration and notification system
 import os
 import logging
 import time
-from datetime import datetime
 from arbitrage_app.bot.notifier.notification_service import ArbitrageNotificationService
 from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
 
@@ -116,11 +115,11 @@ def test_arbitrage_notification():
     
     # Create a mock arbitrage opportunity for testing
     mock_opportunity = ArbitrageOpportunity(
-        symbol="BTCIRT",
-        nobitex_price=1500000000.0,  # 1.5B IRT
-        wallex_price=45000.0,        # $45,000 USD
-        profit_percentage=2.5,       # 2.5% profit
-        profit_amount=37500000.0,    # 37.5M IRT profit
+        symbol="BTCUSDT",
+        nobitex_price=56250.0,      # 56250 USDT
+        wallex_price=45000.0,        # 45000 USDT
+        profit_percentage=25,       # 25% profit
+        profit_amount=11250.0,    # 11250 USDT profit
         buy_exchange="wallex",
         sell_exchange="nobitex",
         timestamp=time.time()
@@ -159,10 +158,10 @@ def test_real_arbitrage_scan():
     if opportunities:
         print("\nArbitrage Opportunities Found:")
         for opp in opportunities:
-            print(f"  • {opp.symbol}: {opp.profit_percentage:.2f}% profit")
+            print(f"  • {opp.symbol}: {opp.profit_percentage:.6f}% profit")
             print(f"    Buy: {opp.buy_exchange}, Sell: {opp.sell_exchange}")
-            print(f"    Nobitex: {opp.nobitex_price:,.2f} IRT")
-            print(f"    Wallex: {opp.wallex_price:,.2f} USDT")
+            print(f"    Nobitex: {opp.nobitex_price:,.6f} USDT")
+            print(f"    Wallex: {opp.wallex_price:,.6f} USDT")
             print()
     else:
         print("No arbitrage opportunities found at this time.")
@@ -190,7 +189,7 @@ def main():
         if opportunities:
             print(f"Found {len(opportunities)} arbitrage opportunities:")
             for opp in opportunities:
-                print(f"  • {opp.symbol}: {opp.profit_percentage:.2f}% profit")
+                print(f"  • {opp.symbol}: {opp.profit_percentage:.6f}% profit")
         else:
             print("No arbitrage opportunities found.")
         

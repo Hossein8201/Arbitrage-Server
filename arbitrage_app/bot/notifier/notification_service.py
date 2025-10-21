@@ -1,10 +1,8 @@
-import os
 import logging
 import time
 from typing import List
-from datetime import datetime
 from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageDetector, ArbitrageOpportunity
-from arbitrage_app.bot.notifier.bale_notifier import BaleNotifier, create_bale_notifier
+from arbitrage_app.bot.notifier.bale_notifier import create_bale_notifier
 
 
 logger = logging.getLogger(__name__)
@@ -191,7 +189,7 @@ def main():
     if opportunities:
         print(f"\n🎯 Found {len(opportunities)} arbitrage opportunities:")
         for opp in opportunities:
-            print(f"  • {opp.symbol}: {opp.profit_percentage:.2f}% profit")
+            print(f"  • {opp.symbol}: {opp.profit_percentage:.6f}% profit")
     else:
         print("\n📊 No arbitrage opportunities found at this time.")
     

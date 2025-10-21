@@ -4,10 +4,7 @@ import requests
 from typing import Optional
 from datetime import datetime
 from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
-from arbitrage_app.scraper.sample_trading import TRADING_PAIRS
-
-from dotenv import load_dotenv
-load_dotenv()
+from arbitrage_app.sample_trading import TRADING_PAIRS, ARBITRAGE_THRESHOLD
 
 logger = logging.getLogger(__name__)
 
@@ -66,12 +63,12 @@ class BaleNotifier:
         time_str = discovery_time.strftime("%Y-%m-%d %H:%M:%S")
         
         # Format prices with proper formatting
-        nobitex_price_str = f"{opportunity.nobitex_price:,.2f}"
-        wallex_price_str = f"{opportunity.wallex_price:,.2f}"
+        nobitex_price_str = f"{opportunity.nobitex_price:,.6f}"
+        wallex_price_str = f"{opportunity.wallex_price:,.6f}"
         
         # Format profit information
-        profit_percentage_str = f"{opportunity.profit_percentage:.2f}%"
-        profit_amount_str = f"{opportunity.profit_amount:,.2f}"
+        profit_percentage_str = f"{opportunity.profit_percentage:.6f}%"
+        profit_amount_str = f"{opportunity.profit_amount:,.6f}"
         
         # Create the message
         message = f"""
@@ -144,7 +141,7 @@ _ The service is now actively monitoring for arbitrage opportunities. _
         """.format(
             time=datetime.now().strftime("%Y-%m-%d %H:%M:%S"),
             pairs=len(TRADING_PAIRS),
-            threshold=os.getenv("ARBITRAGE_THRESHOLD")
+            threshold=ARBITRAGE_THRESHOLD
         ).strip()
         
         return self.send_message(startup_message)
