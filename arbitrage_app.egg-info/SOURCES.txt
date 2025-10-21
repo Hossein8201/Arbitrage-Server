@@ -1,4 +1,5 @@
 pyproject.toml
+arbitrage_app/sample_trading.py
 arbitrage_app.egg-info/PKG-INFO
 arbitrage_app.egg-info/SOURCES.txt
 arbitrage_app.egg-info/dependency_links.txt
@@ -6,7 +7,6 @@ arbitrage_app.egg-info/top_level.txt
 arbitrage_app/bot/notifier/bale_notifier.py
 arbitrage_app/bot/notifier/notification_service.py
 arbitrage_app/bot/test/test_bale.py
-arbitrage_app/scraper/sample_trading.py
 arbitrage_app/scraper/api/nobitex_api.py
 arbitrage_app/scraper/api/wallex_api.py
 arbitrage_app/scraper/detector/arbitrage_detector.py
