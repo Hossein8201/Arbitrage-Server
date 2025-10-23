@@ -107,14 +107,14 @@ class ArbitrageApp:
         try:
             if self.service.bale_notifier:
                 shutdown_message = f"""
-🛑 <b>Arbitrage Detection Service Stopped</b>
+🛑 * Arbitrage Detection Service Stopped *
 
 ⏰ Stop time: {datetime.now().strftime("%Y-%m-%d %H:%M:%S")}
 📊 Total uptime: {uptime_str}
 🔍 Total scans: {self.scan_count}
 🎯 Total opportunities: {self.total_opportunities}
 
-<i>Service has been stopped.</i>
+_ Service has been stopped. _
                 """.strip()
                 
                 self.service.bale_notifier.send_message(shutdown_message)

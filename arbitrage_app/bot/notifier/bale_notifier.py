@@ -6,6 +6,9 @@ from datetime import datetime
 from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
 from arbitrage_app.sample_trading import TRADING_PAIRS, ARBITRAGE_THRESHOLD
 
+from dotenv import load_dotenv
+load_dotenv()
+
 logger = logging.getLogger(__name__)
 
 class BaleNotifier:
