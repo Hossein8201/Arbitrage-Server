@@ -1,4 +1,6 @@
+README.md
 pyproject.toml
+arbitrage_app/main.py
 arbitrage_app/sample_trading.py
 arbitrage_app.egg-info/PKG-INFO
 arbitrage_app.egg-info/SOURCES.txt
