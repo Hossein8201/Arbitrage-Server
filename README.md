@@ -4,9 +4,10 @@ A continuous cryptocurrency arbitrage detection service that monitors price diff
 
 ## 🚀 Quick Start
 
-### 1. Install Dependencies
+### 1. Install Dependencies and install project package
 ```bash
 pip install -r arbitrage_app/requirements.txt
+pip install -e .
 ```
 
 ### 2. Configure Bale Bot (Optional)
@@ -18,12 +19,7 @@ export BALE_CHAT_ID="your_chat_id"
 
 ### 3. Start the Service
 ```bash
-python arbitrage_app.py
-```
-
-Or use the manager script:
-```bash
-python start_arbitrage.py start
+python arbitrage_app/main.py
 ```
 
 ## 📁 Project Structure
@@ -64,18 +60,6 @@ Edit `arbitrage_app/sample_trading.py` to modify:
 - **Error Handling**: Robust error handling and recovery
 - **Logging**: Comprehensive logging to file and console
 - **Graceful Shutdown**: Handles Ctrl+C and system signals
-
-## 🧪 Testing
-
-Test the service components:
-```bash
-python start_arbitrage.py test
-```
-
-Check service status:
-```bash
-python start_arbitrage.py status
-```
 
 ## 📝 Logs
 
