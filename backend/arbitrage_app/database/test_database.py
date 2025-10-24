@@ -8,6 +8,8 @@ import os
 import sys
 import logging
 from datetime import datetime
+from dotenv import load_dotenv
+load_dotenv()
 
 from arbitrage_app.database.models import db_manager, ArbitrageOpportunity, PriceData
 from arbitrage_app.database.integration import DatabaseIntegrationService
@@ -126,7 +128,7 @@ def main():
     logger.info("Database Integration Test Suite")
     
     # Check environment variables
-    database_url = os.getenv("DATABASE_URL", "postgresql://root:JkJlRIM5ctJEdGGIv9Rkzmlr@bromo.liara.cloud:30918/postgres")
+    database_url = os.getenv("DATABASE_URL")
     logger.info(f"Database URL: {database_url.split('@')[1] if '@' in database_url else 'local'}")
     
     # Run tests
