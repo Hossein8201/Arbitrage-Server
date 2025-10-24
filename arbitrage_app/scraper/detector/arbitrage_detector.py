@@ -98,6 +98,7 @@ class ArbitrageDetector:
         if not nobitex_price or not wallex_price:
             logger.warning(f"Missing price data for {symbol}: Nobitex={nobitex_price}, Wallex={wallex_price}")
             return None
+        logger.info(f"Nobitex price and Wallex price for {symbol} received successfully")
         
         arbitrage_result = self.calculate_arbitrage(nobitex_price, wallex_price)
         
@@ -148,40 +149,3 @@ class ArbitrageDetector:
         
         logger.info(f"Found {len(opportunities)} arbitrage opportunities")
         return opportunities
-    
-    def get_market_summary(self) -> Dict[str, Dict]:
-        """
-        Get a summary of current market prices for all trading pairs
-        
-        Returns:
-            Dictionary with price summaries for all pairs
-        """
-        summary = {}
-        
-        for symbol in self.trading_pairs:
-            try:
-                price_data = self.get_price_data(symbol)
-                summary[symbol] = {
-                    "nobitex_price": price_data["nobitex"],
-                    "wallex_price": price_data["wallex"],
-                    "price_difference": None,
-                    "arbitrage_opportunity": False
-                }
-                
-                # Calculate price difference if both prices are available
-                if price_data["nobitex"] and price_data["wallex"]:
-                    diff = abs(price_data["nobitex"] - price_data["wallex"])
-                    summary[symbol]["price_difference"] = diff
-                    
-                    # Check for arbitrage opportunity
-                    arbitrage_result = self.calculate_arbitrage(
-                        price_data["nobitex"], 
-                        price_data["wallex"]
-                    )
-                    summary[symbol]["arbitrage_opportunity"] = arbitrage_result is not None
-                    
-            except Exception as e:
-                logger.error(f"Error getting market summary for {symbol}: {e}")
-                summary[symbol] = {"error": str(e)}
-        
-        return summary

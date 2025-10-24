@@ -25,7 +25,6 @@ class NobitexAPI:
         if current_time - self.minute_start >= 60:
             self.request_count = 0
             self.minute_start = current_time
-        print(self.rate_limit)
         
         # If we've hit the limit, wait until the next minute
         if self.request_count >= self.rate_limit:
@@ -103,39 +102,3 @@ class NobitexAPI:
         except (ValueError, KeyError) as e:
             logger.error(f"Error parsing price for {symbol}: {e}")
             return None
-    
-    def get_buy_sell_prices(self, symbol: str) -> Dict[str, Optional[float]]:
-        """
-        Get separate buy and sell prices from recent trades
-        
-        Args:
-            symbol: Trading pair symbol
-            
-        Returns:
-            Dictionary with 'buy' and 'sell' prices
-        """
-        trades_data = self.get_trades(symbol)
-        
-        if not trades_data or not trades_data.get("trades"):
-            return {"buy": None, "sell": None}
-        
-        trades = trades_data["trades"]
-        buy_prices = []
-        sell_prices = []
-        
-        # Collect recent buy and sell prices
-        for trade in trades[:10]:  # Look at last 10 trades
-            try:
-                price = float(trade["price"])
-                if trade["type"] == "buy":
-                    buy_prices.append(price)
-                elif trade["type"] == "sell":
-                    sell_prices.append(price)
-            except (ValueError, KeyError):
-                continue
-        
-        return {
-            "buy": max(buy_prices) if buy_prices else None,
-            "sell": min(sell_prices) if sell_prices else None
-        }
-

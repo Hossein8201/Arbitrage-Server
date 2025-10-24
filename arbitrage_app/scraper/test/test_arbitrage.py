@@ -45,45 +45,6 @@ def test_api_connections():
         else:
             print(f"  ⚠️  Missing price data")
 
-def test_arbitrage_detection():
-    """Test the arbitrage detection for all trading pairs"""
-    print("\n" + "="*50)
-    print("Testing arbitrage detection for all trading pairs...")
-    print("="*50)
-    
-    detector = ArbitrageDetector()
-    
-    # Get market summary
-    summary = detector.get_market_summary()
-    
-    print(f"\nMarket Summary for {len(TRADING_PAIRS)} trading pairs:")
-    print("-" * 80)
-    print(f"{'Symbol':<10} {'Nobitex':<15} {'Wallex':<15} {'Diff':<15} {'Arbitrage':<10}")
-    print("-" * 80)
-    
-    arbitrage_count = 0
-    
-    for symbol, data in summary.items():
-        if "error" in data:
-            print(f"{symbol:<10} ERROR: {data['error']}")
-            continue
-            
-        nobitex_price = data.get("nobitex_price", "N/A")
-        wallex_price = data.get("wallex_price", "N/A")
-        price_diff = data.get("price_difference", "N/A")
-        has_arbitrage = data.get("arbitrage_opportunity", False)
-        
-        if has_arbitrage:
-            arbitrage_count += 1
-            arbitrage_indicator = "🎯 YES"
-        else:
-            arbitrage_indicator = "❌ NO"
-        
-        print(f"{symbol:<10} {str(nobitex_price):<15} {str(wallex_price):<15} {str(price_diff):<15} {arbitrage_indicator:<10}")
-    
-    print("-" * 80)
-    print(f"Total arbitrage opportunities found: {arbitrage_count}")
-
 def test_full_scan():
     """Test the full arbitrage scanning functionality"""
     print("\n" + "="*50)
@@ -118,9 +79,6 @@ if __name__ == "__main__":
     try:
         # Test API connections
         test_api_connections()
-        
-        # Test arbitrage detection
-        test_arbitrage_detection()
         
         # Test full scan
         test_full_scan()
