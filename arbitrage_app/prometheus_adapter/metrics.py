@@ -3,8 +3,11 @@ Prometheus metrics collection for Arbitrage Detection Service
 """
 
 import time
+import logging
 from prometheus_client import Counter, Histogram, Gauge, start_http_server, generate_latest
 from typing import Dict, Optional
+
+logger = logging.getLogger(__name__)
 
 # Request counters for each exchange
 nobitex_requests_total = Counter(
@@ -154,8 +157,8 @@ class PrometheusMetrics:
 def start_metrics_server(port: int = 8000):
     """Start the Prometheus metrics HTTP server"""
     start_http_server(port)
-    print(f"📊 Prometheus metrics server started on port {port}")
-    print(f"🔗 Metrics endpoint: http://localhost:{port}/metrics")
+    logger.info(f"📊 Prometheus metrics server started on port {port}")
+    logger.info(f"🔗 Metrics endpoint: http://localhost:{port}/metrics")
 
 def get_metrics_data():
     """Get the latest metrics data in Prometheus format"""
