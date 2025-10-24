@@ -3,12 +3,10 @@ Arbitrage Detection Application
 Main application that runs the arbitrage detection service continuously
 """
 
-import os
 import sys
 import time
 import signal
 import logging
-import schedule
 from datetime import datetime
 
 from arbitrage_app.bot.notifier.notification_service import ArbitrageNotificationService
@@ -62,11 +60,7 @@ class ArbitrageApp:
         logger.info(f"  Bale configured: {status['bale_configured']}")
         logger.info(f"  Trading pairs: {status['trading_pairs_count']}")
         logger.info(f"  Arbitrage threshold: {status['arbitrage_threshold']*100}%")
-        logger.info(f"  Check interval: {CHECK_INTERVAL_SECONDS} seconds")
-        
-        # Schedule the arbitrage scanning
-        schedule.every(CHECK_INTERVAL_SECONDS).seconds.do(self._scan_cycle)
-        
+        logger.info(f"  Check interval: {CHECK_INTERVAL_SECONDS} seconds")        
         logger.info(f"✅ Service started successfully!")
         logger.info(f"🔄 Monitoring {status['trading_pairs_count']} trading pairs every {CHECK_INTERVAL_SECONDS} seconds")
         logger.info("Press Ctrl+C to stop the service")
@@ -75,8 +69,11 @@ class ArbitrageApp:
         # Main loop
         try:
             while self.running:
-                schedule.run_pending()
-                time.sleep(1)  # Check every second for scheduled tasks
+                running_time = time.time()
+                self._scan_cycle()
+                elapsed_time = time.time() - running_time
+                if elapsed_time < CHECK_INTERVAL_SECONDS:
+                    time.sleep(CHECK_INTERVAL_SECONDS - elapsed_time)
                 
         except KeyboardInterrupt:
             logger.info("Received keyboard interrupt. Shutting down...")
