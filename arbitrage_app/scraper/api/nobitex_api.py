@@ -10,12 +10,13 @@ logger = logging.getLogger(__name__)
 class NobitexAPI:
     """Client for interacting with Nobitex exchange API"""
     
-    def __init__(self):
+    def __init__(self, metrics_collector=None):
         self.base_url = NOBITEX_BASE_URL
         self.rate_limit = NOBITEX_RATE_LIMIT
         self.last_request_time = 0
         self.request_count = 0
         self.minute_start = time.time()
+        self.metrics = metrics_collector
     
     def _rate_limit_check(self):
         """Ensure we don't exceed the rate limit of 60 requests per minute"""
@@ -56,24 +57,40 @@ class NobitexAPI:
         self._rate_limit_check()
         
         url = f"{self.base_url}/v2/trades/{symbol}"
+        start_time = time.time()
         
         try:
             response = requests.get(url, timeout=10)
             response.raise_for_status()
             
             data = response.json()
+            response_time = time.time() - start_time
             
             if data.get("status") == "ok":
+                # Record successful request metrics
+                if self.metrics:
+                    self.metrics.record_nobitex_request(True, response_time)
                 return data
             else:
                 logger.error(f"Nobitex API error for {symbol}: {data}")
+                # Record failed request metrics
+                if self.metrics:
+                    self.metrics.record_nobitex_request(False, response_time)
                 return None
                 
         except requests.exceptions.RequestException as e:
             logger.error(f"Request failed for {symbol}: {e}")
+            response_time = time.time() - start_time
+            # Record failed request metrics
+            if self.metrics:
+                self.metrics.record_nobitex_request(False, response_time)
             return None
         except ValueError as e:
             logger.error(f"JSON decode error for {symbol}: {e}")
+            response_time = time.time() - start_time
+            # Record failed request metrics
+            if self.metrics:
+                self.metrics.record_nobitex_request(False, response_time)
             return None
     
     def get_latest_price(self, symbol: str) -> Optional[float]:

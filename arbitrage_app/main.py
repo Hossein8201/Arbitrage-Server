@@ -11,6 +11,7 @@ from datetime import datetime
 
 from arbitrage_app.bot.notifier.notification_service import ArbitrageNotificationService
 from arbitrage_app.sample_trading import CHECK_INTERVAL_SECONDS
+from arbitrage_app.prometheus_adapter.metrics import PrometheusMetrics, start_metrics_server
 
 # Configure logging
 logging.basicConfig(
@@ -24,9 +25,10 @@ class ArbitrageApp:
     """Main application class for continuous arbitrage detection"""
     
     def __init__(self):
-        self.service = ArbitrageNotificationService()
+        self.start_time = time.time()
+        self.metrics = PrometheusMetrics(self.start_time)
+        self.service = ArbitrageNotificationService(self.metrics)
         self.running = False
-        self.start_time = None
         self.scan_count = 0
         self.total_opportunities = 0
         self.last_scan_time = None
@@ -61,8 +63,13 @@ class ArbitrageApp:
         logger.info(f"  Trading pairs: {status['trading_pairs_count']}")
         logger.info(f"  Arbitrage threshold: {status['arbitrage_threshold']*100}%")
         logger.info(f"  Check interval: {CHECK_INTERVAL_SECONDS} seconds")        
+        # Start Prometheus metrics server
+        metrics_port = 8000
+        start_metrics_server(metrics_port)
+        
         logger.info(f"✅ Service started successfully!")
         logger.info(f"🔄 Monitoring {status['trading_pairs_count']} trading pairs every {CHECK_INTERVAL_SECONDS} seconds")
+        logger.info(f"📊 Prometheus metrics available at http://localhost:{metrics_port}/metrics")
         logger.info("Press Ctrl+C to stop the service")
         logger.info("-" * 60)
         
@@ -136,6 +143,9 @@ _ Service has been stopped. _
             
             # Update statistics
             self.total_opportunities += len(opportunities)
+            
+            # Update Prometheus metrics
+            self.metrics.update_service_metrics(self.scan_count)
             
             # Log results
             if opportunities:
