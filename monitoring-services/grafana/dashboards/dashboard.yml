@@ -1,0 +1,12 @@
+apiVersion: 1
+
+providers:
+  - name: 'arbitrage-dashboards'
+    orgId: 1
+    folder: 'Arbitrage'
+    type: file
+    disableDeletion: false
+    updateIntervalSeconds: 10
+    allowUiUpdates: true
+    options:
+      path: /etc/grafana/provisioning/dashboards
