@@ -16,7 +16,8 @@ services:
       - '--storage.tsdb.retention.time=200h'
       - '--web.enable-lifecycle'
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - monitoring
 
   grafana:
     image: grafana/grafana:latest
@@ -29,9 +30,13 @@ services:
       - ./grafana/dashboards:/etc/grafana/provisioning/dashboards
       - ./grafana/datasources:/etc/grafana/provisioning/datasources
     restart: unless-stopped
-    network_mode: host
+    networks:
+      - monitoring
 
 volumes:
   prometheus_data:
   grafana_data:
 
+networks:
+  monitoring:
+    driver: bridge
