@@ -1,8 +1,8 @@
 {
   "dashboard": {
     "id": null,
-    "title": "Arbitrage Detection Service",
-    "tags": ["arbitrage", "cryptocurrency", "monitoring"],
+    "title": "Arbitrage Detection & Database Monitoring",
+    "tags": ["arbitrage", "cryptocurrency", "postgresql", "monitoring"],
     "style": "dark",
     "timezone": "browser",
     "panels": [
@@ -75,19 +75,26 @@
       },
       {
         "id": 4,
-        "title": "Discovery Rate",
+        "title": "Database Connections",
         "type": "stat",
         "targets": [
           {
-            "expr": "rate(arbitrage_discovery_rate_total[5m])",
-            "legendFormat": "Rate/min"
+            "expr": "pg_stat_database_numbackends",
+            "legendFormat": "Active Connections"
           }
         ],
         "fieldConfig": {
           "defaults": {
             "unit": "short",
             "color": {
-              "mode": "palette-classic"
+              "mode": "thresholds"
+            },
+            "thresholds": {
+              "steps": [
+                {"color": "green", "value": 0},
+                {"color": "yellow", "value": 50},
+                {"color": "red", "value": 100}
+              ]
             }
           }
         },
@@ -177,6 +184,82 @@
       },
       {
         "id": 8,
+        "title": "PostgreSQL Database Size",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "pg_database_size_bytes",
+            "legendFormat": "Database Size - {{datname}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "bytes",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+      },
+      {
+        "id": 9,
+        "title": "PostgreSQL Query Performance",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "rate(pg_stat_database_tup_returned[5m])",
+            "legendFormat": "Tuples Returned/sec - {{datname}}"
+          },
+          {
+            "expr": "rate(pg_stat_database_tup_fetched[5m])",
+            "legendFormat": "Tuples Fetched/sec - {{datname}}"
+          },
+          {
+            "expr": "rate(pg_stat_database_tup_inserted[5m])",
+            "legendFormat": "Tuples Inserted/sec - {{datname}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+      },
+      {
+        "id": 10,
+        "title": "PostgreSQL Connection Stats",
+        "type": "timeseries",
+        "targets": [
+          {
+            "expr": "pg_stat_database_numbackends",
+            "legendFormat": "Active Connections - {{datname}}"
+          },
+          {
+            "expr": "pg_stat_database_xact_commit",
+            "legendFormat": "Transactions Committed - {{datname}}"
+          },
+          {
+            "expr": "pg_stat_database_xact_rollback",
+            "legendFormat": "Transactions Rolled Back - {{datname}}"
+          }
+        ],
+        "fieldConfig": {
+          "defaults": {
+            "unit": "short",
+            "color": {
+              "mode": "palette-classic"
+            }
+          }
+        },
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+      },
+      {
+        "id": 11,
         "title": "Price Differences by Symbol",
         "type": "timeseries",
         "targets": [
@@ -193,10 +276,10 @@
             }
           }
         },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
       },
       {
-        "id": 9,
+        "id": 12,
         "title": "Arbitrage Opportunities by Symbol",
         "type": "piechart",
         "targets": [
@@ -212,31 +295,7 @@
             }
           }
         },
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
-      },
-      {
-        "id": 10,
-        "title": "Exchange Prices Comparison",
-        "type": "timeseries",
-        "targets": [
-          {
-            "expr": "nobitex_price",
-            "legendFormat": "Nobitex {{symbol}}"
-          },
-          {
-            "expr": "wallex_price",
-            "legendFormat": "Wallex {{symbol}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
       }
     ],
     "time": {
