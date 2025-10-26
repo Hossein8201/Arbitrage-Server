@@ -10,8 +10,8 @@ from datetime import datetime
 from dotenv import load_dotenv
 load_dotenv()
 
-from arbitrage_app.database.models import db_manager, ArbitrageOpportunity, PriceData
 from arbitrage_app.database.integration import DatabaseIntegrationService
+from arbitrage_app.scraper.detector.arbitrage_detector import ArbitrageOpportunity
 
 # Configure logging
 logging.basicConfig(
@@ -21,6 +21,7 @@ logging.basicConfig(
 
 logger = logging.getLogger(__name__)
 
+database_integration_service = DatabaseIntegrationService()
 def test_database_tables():
     """Test database table creation and basic operations"""
     print("\n📊 Testing Database Tables")
@@ -28,18 +29,18 @@ def test_database_tables():
     
     try:
         # Test storing a sample arbitrage opportunity
-        sample_opportunity = {
-            'symbol': 'BTCUSDT',
-            'nobitex_price': 45000.0,
-            'wallex_price': 45500.0,
-            'profit_percentage': 1.11,
-            'profit_amount': 500.0,
-            'buy_exchange': 'nobitex',
-            'sell_exchange': 'wallex',
-            'timestamp': datetime.utcnow()
-        }
+        sample_opportunity = ArbitrageOpportunity(
+            symbol='BTCUSDT',
+            nobitex_price=45000.0,
+            wallex_price=45500.0,
+            profit_percentage=1.11,
+            profit_amount=500.0,
+            buy_exchange='nobitex',
+            sell_exchange='wallex',
+            timestamp=datetime.utcnow()
+        )
         
-        success = db_manager.store_arbitrage_opportunity(sample_opportunity)
+        success = database_integration_service.store_arbitrage_opportunity(sample_opportunity)
         if success:
             logger.info("Arbitrage opportunity stored successfully")
         else:
@@ -47,8 +48,7 @@ def test_database_tables():
             return False
         
         # Test storing price data
-        price_success = db_manager.store_price_data('BTCUSDT', 'nobitex', 45000.0)
-        price_success = db_manager.store_price_data('BTCUSDT', 'wallex', 45500.0)
+        price_success = database_integration_service.store_price_data('BTCUSDT', 45000.0, 45500.0, datetime.utcnow())
         
         if price_success:
             logger.info("Price data stored successfully")
@@ -68,15 +68,15 @@ def test_database_queries():
     
     try:
         # Test getting recent opportunities
-        recent_opportunities = db_manager.get_recent_opportunities(5)
+        recent_opportunities = database_integration_service.get_recent_opportunities(5)
         logger.info(f"Retrieved {len(recent_opportunities)} recent opportunities")
         
         # Test getting opportunities by symbol
-        btc_opportunities = db_manager.get_opportunities_by_symbol('BTCUSDT', 5)
+        btc_opportunities = database_integration_service.get_opportunities_by_symbol('BTCUSDT', 5)
         logger.info(f"Retrieved {len(btc_opportunities)} BTC opportunities")
         
         # Test getting price history
-        nobitex_history = db_manager.get_price_history('BTCUSDT', 'nobitex', 5)
+        nobitex_history = database_integration_service.get_price_history('BTCUSDT', 'nobitex', 5)
         logger.info(f"Retrieved {len(nobitex_history)} Nobitex price records")
         
         return True

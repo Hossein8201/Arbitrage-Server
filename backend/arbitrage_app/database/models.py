@@ -23,7 +23,7 @@ engine = create_engine(DATABASE_URL, echo=False, pool_pre_ping=True)
 SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
 Base = declarative_base()
 
-class ArbitrageOpportunity(Base):
+class ArbitrageOpportunityTable(Base):
     """Database model for storing arbitrage opportunities"""
     __tablename__ = "arbitrage_opportunities"
     
@@ -38,7 +38,7 @@ class ArbitrageOpportunity(Base):
     timestamp = Column(DateTime, default=datetime.utcnow, index=True)
     created_at = Column(DateTime, default=datetime.utcnow)
 
-class PriceData(Base):
+class PriceDataTable(Base):
     """Database model for storing price data from exchanges"""
     __tablename__ = "price_data"
     
@@ -74,23 +74,23 @@ class DatabaseManager:
         """Store an arbitrage opportunity in the database"""
         try:
             with self.get_session() as session:
-                opportunity = ArbitrageOpportunity(**opportunity_data)
+                opportunity = ArbitrageOpportunityTable(**opportunity_data)
                 session.add(opportunity)
                 session.commit()
-                logger.info(f"Stored arbitrage opportunity for {opportunity_data['symbol']}")
                 return True
         except SQLAlchemyError as e:
             logger.error(f"Error storing arbitrage opportunity: {e}")
             return False
     
-    def store_price_data(self, symbol: str, exchange: str, price: float) -> bool:
+    def store_price_data(self, symbol: str, exchange: str, price: float, timestamp: datetime) -> bool:
         """Store price data in the database"""
         try:
             with self.get_session() as session:
-                price_record = PriceData(
+                price_record = PriceDataTable(
                     symbol=symbol,
                     exchange=exchange,
-                    price=price
+                    price=price,
+                    timestamp=timestamp
                 )
                 session.add(price_record)
                 session.commit()
@@ -99,38 +99,38 @@ class DatabaseManager:
             logger.error(f"Error storing price data: {e}")
             return False
     
-    def get_recent_opportunities(self, limit: int = 100) -> List[ArbitrageOpportunity]:
+    def get_recent_opportunities(self, limit: int = 100) -> List[ArbitrageOpportunityTable]:
         """Get recent arbitrage opportunities"""
         try:
             with self.get_session() as session:
-                return session.query(ArbitrageOpportunity)\
-                    .order_by(ArbitrageOpportunity.timestamp.desc())\
+                return session.query(ArbitrageOpportunityTable)\
+                    .order_by(ArbitrageOpportunityTable.timestamp.desc())\
                     .limit(limit)\
                     .all()
         except SQLAlchemyError as e:
             logger.error(f"Error getting recent opportunities: {e}")
             return []
     
-    def get_opportunities_by_symbol(self, symbol: str, limit: int = 50) -> List[ArbitrageOpportunity]:
+    def get_opportunities_by_symbol(self, symbol: str, limit: int = 50) -> List[ArbitrageOpportunityTable]:
         """Get arbitrage opportunities for a specific symbol"""
         try:
             with self.get_session() as session:
-                return session.query(ArbitrageOpportunity)\
-                    .filter(ArbitrageOpportunity.symbol == symbol)\
-                    .order_by(ArbitrageOpportunity.timestamp.desc())\
+                return session.query(ArbitrageOpportunityTable)\
+                    .filter(ArbitrageOpportunityTable.symbol == symbol)\
+                    .order_by(ArbitrageOpportunityTable.timestamp.desc())\
                     .limit(limit)\
                     .all()
         except SQLAlchemyError as e:
             logger.error(f"Error getting opportunities for {symbol}: {e}")
             return []
     
-    def get_price_history(self, symbol: str, exchange: str, limit: int = 100) -> List[PriceData]:
+    def get_price_history(self, symbol: str, exchange: str, limit: int = 100) -> List[PriceDataTable]:
         """Get price history for a symbol and exchange"""
         try:
             with self.get_session() as session:
-                return session.query(PriceData)\
-                    .filter(PriceData.symbol == symbol, PriceData.exchange == exchange)\
-                    .order_by(PriceData.timestamp.desc())\
+                return session.query(PriceDataTable)\
+                    .filter(PriceDataTable.symbol == symbol, PriceDataTable.exchange == exchange)\
+                    .order_by(PriceDataTable.timestamp.desc())\
                     .limit(limit)\
                     .all()
         except SQLAlchemyError as e:
