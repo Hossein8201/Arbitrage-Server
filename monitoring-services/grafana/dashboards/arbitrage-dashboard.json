@@ -84,7 +84,7 @@
         "id": 4,
         "title": "Database Connections",
         "type": "stat",
-        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "pg_stat_database_numbackends",
@@ -115,15 +115,15 @@
         "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, rate(nobitex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.50, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "50th percentile"
           },
           {
-            "expr": "histogram_quantile(0.95, rate(nobitex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.95, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "95th percentile"
           },
           {
-            "expr": "histogram_quantile(0.99, rate(nobitex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.99, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "99th percentile"
           }
         ],
@@ -144,15 +144,15 @@
         "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, rate(wallex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.50, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "50th percentile"
           },
           {
-            "expr": "histogram_quantile(0.95, rate(wallex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.95, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "95th percentile"
           },
           {
-            "expr": "histogram_quantile(0.99, rate(wallex_response_time_seconds[5m]))",
+            "expr": "histogram_quantile(0.99, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
             "legendFormat": "99th percentile"
           }
         ],
@@ -197,7 +197,7 @@
         "id": 8,
         "title": "PostgreSQL Database Size",
         "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "pg_database_size_bytes",
@@ -218,7 +218,7 @@
         "id": 9,
         "title": "PostgreSQL Query Performance",
         "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "rate(pg_stat_database_tup_returned[5m])",
@@ -247,7 +247,7 @@
         "id": 10,
         "title": "PostgreSQL Connection Stats",
         "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "pg_stat_database_numbackends",
