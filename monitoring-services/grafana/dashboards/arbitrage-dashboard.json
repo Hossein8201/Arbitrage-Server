@@ -1,323 +1,321 @@
 {
-  "dashboard": {
-    "id": null,
-    "uid": "arbitrage-main-dashboard",
-    "title": "Arbitrage Detection & Database Monitoring",
-    "tags": ["arbitrage", "cryptocurrency", "postgresql", "monitoring"],
-    "style": "dark",
-    "timezone": "browser",
-    "editable": true,
-    "hideControls": false,
-    "version": 1,
-    "panels": [
-      {
-        "id": 1,
-        "title": "Service Uptime",
-        "type": "stat",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "service_uptime_seconds",
-            "legendFormat": "Uptime"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "s",
-            "color": {
-              "mode": "thresholds"
-            },
-            "thresholds": {
-              "steps": [
-                {"color": "red", "value": 0},
-                {"color": "yellow", "value": 300},
-                {"color": "green", "value": 3600}
-              ]
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
-      },
-      {
-        "id": 2,
-        "title": "Total Scans",
-        "type": "stat",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "service_scans_total",
-            "legendFormat": "Scans"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
-      },
-      {
-        "id": 3,
-        "title": "Arbitrage Opportunities",
-        "type": "stat",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "arbitrage_opportunities_total",
-            "legendFormat": "Opportunities"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
-      },
-      {
-        "id": 4,
-        "title": "Database Connections",
-        "type": "stat",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "pg_stat_database_numbackends",
-            "legendFormat": "Active Connections"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "thresholds"
-            },
-            "thresholds": {
-              "steps": [
-                {"color": "green", "value": 0},
-                {"color": "yellow", "value": 50},
-                {"color": "red", "value": 100}
-              ]
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
-      },
-      {
-        "id": 5,
-        "title": "Nobitex Response Time",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "histogram_quantile(0.50, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "50th percentile"
+  "id": null,
+  "uid": "arbitrage-main-dashboard",
+  "title": "Arbitrage Detection & Database Monitoring",
+  "tags": ["arbitrage", "cryptocurrency", "postgresql", "monitoring"],
+  "style": "dark",
+  "timezone": "browser",
+  "editable": true,
+  "hideControls": false,
+  "version": 1,
+  "panels": [
+    {
+      "id": 1,
+      "title": "Service Uptime",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "service_uptime_seconds",
+          "legendFormat": "Uptime"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {
+            "mode": "thresholds"
           },
-          {
-            "expr": "histogram_quantile(0.95, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "95th percentile"
-          },
-          {
-            "expr": "histogram_quantile(0.99, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "99th percentile"
+          "thresholds": {
+            "steps": [
+              {"color": "red", "value": 0},
+              {"color": "yellow", "value": 300},
+              {"color": "green", "value": 3600}
+            ]
           }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "s",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+        }
       },
-      {
-        "id": 6,
-        "title": "Wallex Response Time",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "histogram_quantile(0.50, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "50th percentile"
-          },
-          {
-            "expr": "histogram_quantile(0.95, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "95th percentile"
-          },
-          {
-            "expr": "histogram_quantile(0.99, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
-            "legendFormat": "99th percentile"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "s",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
-      },
-      {
-        "id": 7,
-        "title": "API Request Success Rate",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "rate(nobitex_requests_total{status=\"success\"}[5m]) / rate(nobitex_requests_total[5m]) * 100",
-            "legendFormat": "Nobitex Success Rate"
-          },
-          {
-            "expr": "rate(wallex_requests_total{status=\"success\"}[5m]) / rate(wallex_requests_total[5m]) * 100",
-            "legendFormat": "Wallex Success Rate"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "min": 0,
-            "max": 100,
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
-      },
-      {
-        "id": 8,
-        "title": "PostgreSQL Database Size",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "pg_database_size_bytes",
-            "legendFormat": "Database Size - {{datname}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "bytes",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
-      },
-      {
-        "id": 9,
-        "title": "PostgreSQL Query Performance",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "rate(pg_stat_database_tup_returned[5m])",
-            "legendFormat": "Tuples Returned/sec - {{datname}}"
-          },
-          {
-            "expr": "rate(pg_stat_database_tup_fetched[5m])",
-            "legendFormat": "Tuples Fetched/sec - {{datname}}"
-          },
-          {
-            "expr": "rate(pg_stat_database_tup_inserted[5m])",
-            "legendFormat": "Tuples Inserted/sec - {{datname}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
-      },
-      {
-        "id": 10,
-        "title": "PostgreSQL Connection Stats",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "pg_stat_database_numbackends",
-            "legendFormat": "Active Connections - {{datname}}"
-          },
-          {
-            "expr": "pg_stat_database_xact_commit",
-            "legendFormat": "Transactions Committed - {{datname}}"
-          },
-          {
-            "expr": "pg_stat_database_xact_rollback",
-            "legendFormat": "Transactions Rolled Back - {{datname}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "short",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
-      },
-      {
-        "id": 11,
-        "title": "Price Differences by Symbol",
-        "type": "timeseries",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "price_difference_percentage",
-            "legendFormat": "{{symbol}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "unit": "percent",
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
-      },
-      {
-        "id": 12,
-        "title": "Arbitrage Opportunities by Symbol",
-        "type": "piechart",
-        "datasource": { "type": "prometheus", "uid": "Prometheus" },
-        "targets": [
-          {
-            "expr": "arbitrage_opportunities_total",
-            "legendFormat": "{{symbol}}"
-          }
-        ],
-        "fieldConfig": {
-          "defaults": {
-            "color": {
-              "mode": "palette-classic"
-            }
-          }
-        },
-        "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
-      }
-    ],
-    "time": {
-      "from": "now-1h",
-      "to": "now"
+      "gridPos": {"h": 8, "w": 6, "x": 0, "y": 0}
     },
-    "refresh": "5s"
-  }
+    {
+      "id": 2,
+      "title": "Total Scans",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "service_scans_total",
+          "legendFormat": "Scans"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 6, "x": 6, "y": 0}
+    },
+    {
+      "id": 3,
+      "title": "Arbitrage Opportunities",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "arbitrage_opportunities_total",
+          "legendFormat": "Opportunities"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 6, "x": 12, "y": 0}
+    },
+    {
+      "id": 4,
+      "title": "Database Connections",
+      "type": "stat",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "pg_stat_database_numbackends",
+          "legendFormat": "Active Connections"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "thresholds"
+          },
+          "thresholds": {
+            "steps": [
+              {"color": "green", "value": 0},
+              {"color": "yellow", "value": 50},
+              {"color": "red", "value": 100}
+            ]
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 6, "x": 18, "y": 0}
+    },
+    {
+      "id": 5,
+      "title": "Nobitex Response Time",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "50th percentile"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "95th percentile"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(nobitex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "99th percentile"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 8}
+    },
+    {
+      "id": 6,
+      "title": "Wallex Response Time",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "histogram_quantile(0.50, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "50th percentile"
+        },
+        {
+          "expr": "histogram_quantile(0.95, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "95th percentile"
+        },
+        {
+          "expr": "histogram_quantile(0.99, sum(rate(wallex_response_time_seconds_bucket[5m])) by (le))",
+          "legendFormat": "99th percentile"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 8}
+    },
+    {
+      "id": 7,
+      "title": "API Request Success Rate",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "rate(nobitex_requests_total{status=\"success\"}[5m]) / rate(nobitex_requests_total[5m]) * 100",
+          "legendFormat": "Nobitex Success Rate"
+        },
+        {
+          "expr": "rate(wallex_requests_total{status=\"success\"}[5m]) / rate(wallex_requests_total[5m]) * 100",
+          "legendFormat": "Wallex Success Rate"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "min": 0,
+          "max": 100,
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 16}
+    },
+    {
+      "id": 8,
+      "title": "PostgreSQL Database Size",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "pg_database_size_bytes",
+          "legendFormat": "Database Size - {{datname}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "bytes",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 16}
+    },
+    {
+      "id": 9,
+      "title": "PostgreSQL Query Performance",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "rate(pg_stat_database_tup_returned[5m])",
+          "legendFormat": "Tuples Returned/sec - {{datname}}"
+        },
+        {
+          "expr": "rate(pg_stat_database_tup_fetched[5m])",
+          "legendFormat": "Tuples Fetched/sec - {{datname}}"
+        },
+        {
+          "expr": "rate(pg_stat_database_tup_inserted[5m])",
+          "legendFormat": "Tuples Inserted/sec - {{datname}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 24}
+    },
+    {
+      "id": 10,
+      "title": "PostgreSQL Connection Stats",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "pg_stat_database_numbackends",
+          "legendFormat": "Active Connections - {{datname}}"
+        },
+        {
+          "expr": "pg_stat_database_xact_commit",
+          "legendFormat": "Transactions Committed - {{datname}}"
+        },
+        {
+          "expr": "pg_stat_database_xact_rollback",
+          "legendFormat": "Transactions Rolled Back - {{datname}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "short",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 24}
+    },
+    {
+      "id": 11,
+      "title": "Price Differences by Symbol",
+      "type": "timeseries",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "price_difference_percentage",
+          "legendFormat": "{{symbol}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "percent",
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 0, "y": 32}
+    },
+    {
+      "id": 12,
+      "title": "Arbitrage Opportunities by Symbol",
+      "type": "piechart",
+      "datasource": { "type": "prometheus", "uid": "Prometheus" },
+      "targets": [
+        {
+          "expr": "arbitrage_opportunities_total",
+          "legendFormat": "{{symbol}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "color": {
+            "mode": "palette-classic"
+          }
+        }
+      },
+      "gridPos": {"h": 8, "w": 12, "x": 12, "y": 32}
+    }
+  ],
+  "time": {
+    "from": "now-1h",
+    "to": "now"
+  },
+  "refresh": "5s"
 }
