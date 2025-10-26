@@ -36,7 +36,6 @@ class ArbitrageOpportunity(Base):
     buy_exchange = Column(String(20), nullable=False)
     sell_exchange = Column(String(20), nullable=False)
     timestamp = Column(DateTime, default=datetime.utcnow, index=True)
-    notification_sent = Column(Boolean, default=False)
     created_at = Column(DateTime, default=datetime.utcnow)
 
 class PriceData(Base):

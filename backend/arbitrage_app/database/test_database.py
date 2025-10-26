@@ -1,4 +1,3 @@
-#!/usr/bin/env python3
 """
 Database test script for Arbitrage Detection Service
 This script tests the database connection and functionality
@@ -37,8 +36,7 @@ def test_database_tables():
             'profit_amount': 500.0,
             'buy_exchange': 'nobitex',
             'sell_exchange': 'wallex',
-            'timestamp': datetime.utcnow(),
-            'notification_sent': True
+            'timestamp': datetime.utcnow()
         }
         
         success = db_manager.store_arbitrage_opportunity(sample_opportunity)
@@ -50,7 +48,7 @@ def test_database_tables():
         
         # Test storing price data
         price_success = db_manager.store_price_data('BTCUSDT', 'nobitex', 45000.0)
-        price_success &= db_manager.store_price_data('BTCUSDT', 'wallex', 45500.0)
+        price_success = db_manager.store_price_data('BTCUSDT', 'wallex', 45500.0)
         
         if price_success:
             logger.info("Price data stored successfully")
@@ -103,13 +101,13 @@ def test_postgres_exporter_metrics():
                 # Check for some key metrics
                 metrics_text = response.text
                 if 'pg_stat_database' in metrics_text:
-                    print("✅ PostgreSQL database metrics found")
+                    logger.info("✅ PostgreSQL database metrics found")
                 else:
-                    print("⚠️  PostgreSQL database metrics not found")
+                    logger.info("⚠️  PostgreSQL database metrics not found")
                 
                 return True
             else:
-                print(f"❌ PostgreSQL exporter returned status {response.status_code}")
+                logger.info(f"❌ PostgreSQL exporter returned status {response.status_code}")
                 return False
                 
         except requests.exceptions.ConnectionError:
@@ -152,7 +150,7 @@ def main():
     
     if passed == total:
         logger.info("All database tests passed successfully!")
-        logger.info("\nYour database integration is ready for production!")
+        logger.info("Your database integration is ready for production!")
     else:
         logger.error("Some tests failed. Please check the errors above.")
     

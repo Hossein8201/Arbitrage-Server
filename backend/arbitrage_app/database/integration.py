@@ -27,8 +27,7 @@ class DatabaseIntegrationService:
                 'profit_amount': opportunity.profit_amount,
                 'buy_exchange': opportunity.buy_exchange,
                 'sell_exchange': opportunity.sell_exchange,
-                'timestamp': datetime.fromtimestamp(opportunity.timestamp),
-                'notification_sent': True  # Assuming we're storing after notification
+                'timestamp': datetime.fromtimestamp(opportunity.timestamp)
             }
             
             success = self.db_manager.store_arbitrage_opportunity(opportunity_data)
