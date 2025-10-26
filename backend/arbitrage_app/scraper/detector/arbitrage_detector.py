@@ -24,12 +24,13 @@ class ArbitrageOpportunity:
 class ArbitrageDetector:
     """Main class for detecting arbitrage opportunities between Nobitex and Wallex"""
     
-    def __init__(self, metrics_collector=None):
+    def __init__(self, metrics_collector=None, db_manager=None):
         self.nobitex_api = NobitexAPI(metrics_collector)
         self.wallex_api = WallexAPI(metrics_collector)
         self.trading_pairs = TRADING_PAIRS
         self.threshold = ARBITRAGE_THRESHOLD
         self.metrics = metrics_collector
+        self.db_manager = db_manager
         
     def get_price_data(self, symbol: str) -> Dict[str, Optional[float]]:
         """
@@ -100,6 +101,10 @@ class ArbitrageDetector:
             logger.warning(f"Missing price data for {symbol}: Nobitex={nobitex_price}, Wallex={wallex_price}")
             return None
         
+        # Store price data in database
+        self.db_manager.store_price_data(symbol, "nobitex", nobitex_price)
+        self.db_manager.store_price_data(symbol, "wallex", wallex_price)
+        
         # Update price metrics
         if self.metrics:
             self.metrics.update_exchange_prices(symbol, nobitex_price, wallex_price)
@@ -123,6 +128,8 @@ class ArbitrageDetector:
         else:
             profit_amount = nobitex_price - wallex_price
         
+        # Store arbitrage opportunity in database
+        self.db_manager.store_arbitrage_opportunity(symbol, nobitex_price, wallex_price, profit_percentage, profit_amount, buy_exchange, sell_exchange, time.time())
         # Record arbitrage opportunity metrics
         if self.metrics:
             self.metrics.record_arbitrage_opportunity(symbol, buy_exchange, sell_exchange)

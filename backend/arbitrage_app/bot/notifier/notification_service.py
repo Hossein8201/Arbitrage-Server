@@ -10,8 +10,8 @@ logger = logging.getLogger(__name__)
 class ArbitrageNotificationService:
     """Service that monitors for arbitrage opportunities and sends notifications"""
     
-    def __init__(self, metrics_collector=None):
-        self.detector = ArbitrageDetector(metrics_collector)
+    def __init__(self, metrics_collector=None, db_manager=None):
+        self.detector = ArbitrageDetector(metrics_collector, db_manager)
         self.bale_notifier = create_bale_notifier()
         self.last_notifications = {}  # Track last notification time per symbol
         self.notification_cooldown = 300  # 5 minutes cooldown between notifications for same symbol

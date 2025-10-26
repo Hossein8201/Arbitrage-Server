@@ -12,6 +12,7 @@ from datetime import datetime
 from arbitrage_app.bot.notifier.notification_service import ArbitrageNotificationService
 from arbitrage_app.sample_trading import CHECK_INTERVAL_SECONDS
 from arbitrage_app.prometheus_adapter.metrics import PrometheusMetrics, start_metrics_server
+from arbitrage_app.database.models import db_manager
 
 # Configure logging
 logging.basicConfig(
@@ -27,7 +28,8 @@ class ArbitrageApp:
     def __init__(self):
         self.start_time = time.time()
         self.metrics = PrometheusMetrics(self.start_time)
-        self.service = ArbitrageNotificationService(self.metrics)
+        self.db_manager = db_manager
+        self.service = ArbitrageNotificationService(self.metrics, self.db_manager)
         self.running = False
         self.scan_count = 0
         self.total_opportunities = 0
