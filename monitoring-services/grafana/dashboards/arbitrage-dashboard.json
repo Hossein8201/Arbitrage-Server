@@ -1,15 +1,20 @@
 {
   "dashboard": {
     "id": null,
+    "uid": "arbitrage-main-dashboard",
     "title": "Arbitrage Detection & Database Monitoring",
     "tags": ["arbitrage", "cryptocurrency", "postgresql", "monitoring"],
     "style": "dark",
     "timezone": "browser",
+    "editable": true,
+    "hideControls": false,
+    "version": 1,
     "panels": [
       {
         "id": 1,
         "title": "Service Uptime",
         "type": "stat",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "service_uptime_seconds",
@@ -37,6 +42,7 @@
         "id": 2,
         "title": "Total Scans",
         "type": "stat",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "service_scans_total",
@@ -57,6 +63,7 @@
         "id": 3,
         "title": "Arbitrage Opportunities",
         "type": "stat",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "arbitrage_opportunities_total",
@@ -77,6 +84,7 @@
         "id": 4,
         "title": "Database Connections",
         "type": "stat",
+        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
         "targets": [
           {
             "expr": "pg_stat_database_numbackends",
@@ -104,17 +112,18 @@
         "id": 5,
         "title": "Nobitex Response Time",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, rate(nobitex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.50, rate(nobitex_response_time_seconds[5m]))",
             "legendFormat": "50th percentile"
           },
           {
-            "expr": "histogram_quantile(0.95, rate(nobitex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.95, rate(nobitex_response_time_seconds[5m]))",
             "legendFormat": "95th percentile"
           },
           {
-            "expr": "histogram_quantile(0.99, rate(nobitex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.99, rate(nobitex_response_time_seconds[5m]))",
             "legendFormat": "99th percentile"
           }
         ],
@@ -132,17 +141,18 @@
         "id": 6,
         "title": "Wallex Response Time",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
-            "expr": "histogram_quantile(0.50, rate(wallex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.50, rate(wallex_response_time_seconds[5m]))",
             "legendFormat": "50th percentile"
           },
           {
-            "expr": "histogram_quantile(0.95, rate(wallex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.95, rate(wallex_response_time_seconds[5m]))",
             "legendFormat": "95th percentile"
           },
           {
-            "expr": "histogram_quantile(0.99, rate(wallex_response_time_seconds_bucket[5m]))",
+            "expr": "histogram_quantile(0.99, rate(wallex_response_time_seconds[5m]))",
             "legendFormat": "99th percentile"
           }
         ],
@@ -160,6 +170,7 @@
         "id": 7,
         "title": "API Request Success Rate",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "rate(nobitex_requests_total{status=\"success\"}[5m]) / rate(nobitex_requests_total[5m]) * 100",
@@ -186,6 +197,7 @@
         "id": 8,
         "title": "PostgreSQL Database Size",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
         "targets": [
           {
             "expr": "pg_database_size_bytes",
@@ -206,6 +218,7 @@
         "id": 9,
         "title": "PostgreSQL Query Performance",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
         "targets": [
           {
             "expr": "rate(pg_stat_database_tup_returned[5m])",
@@ -234,6 +247,7 @@
         "id": 10,
         "title": "PostgreSQL Connection Stats",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Postgres Exporter" },
         "targets": [
           {
             "expr": "pg_stat_database_numbackends",
@@ -262,6 +276,7 @@
         "id": 11,
         "title": "Price Differences by Symbol",
         "type": "timeseries",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "price_difference_percentage",
@@ -282,6 +297,7 @@
         "id": 12,
         "title": "Arbitrage Opportunities by Symbol",
         "type": "piechart",
+        "datasource": { "type": "prometheus", "uid": "Prometheus" },
         "targets": [
           {
             "expr": "arbitrage_opportunities_total",
