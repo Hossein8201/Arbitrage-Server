@@ -21,8 +21,10 @@ services:
     image: prometheuscommunity/postgres-exporter:latest
     ports:
       - "9187:9187"
+    env_file:
+      - .env
     environment:
-      - DATA_SOURCE_NAME=postgresql://root:JkJlRIM5ctJEdGGIv9Rkzmlr@bromo.liara.cloud:30918/postgres?sslmode=disable
+      - DATA_SOURCE_NAME=${DATA_SOURCE_NAME}
     restart: unless-stopped
 
   grafana:
